@@ -9,7 +9,6 @@ typedef struct nodo {
 struct cola {
 	nodo_t* primero;
 	nodo_t* ultimo;
-	size_t tam;
 };
 
 /* *****************************************************************
@@ -43,14 +42,12 @@ cola_t* cola_crear(void) {
 
 	cola->primero = NULL;
 	cola->ultimo = NULL;
-	cola->tam = 0;
-
 	return cola;
 }
 
 bool cola_esta_vacia(const cola_t *cola) {
 
-	if (cola->tam == 0) return true;
+	if (cola->primero == NULL) return true;
 	return false;
 }
 
@@ -63,8 +60,7 @@ void* cola_ver_primero(const cola_t *cola) {
 
 void cola_destruir(cola_t *cola, void destruir_dato(void*)) {
 
-	size_t tam = cola->tam;
-	for(int i = 0; i < tam; i++) {
+	while(cola->primero != NULL){
 
 		void* valor = cola_desencolar(cola);
 
@@ -83,15 +79,14 @@ bool cola_encolar(cola_t *cola, void* valor) {
 
 	if (cola_esta_vacia(cola)) {
 
-		cola->ultimo = nodo_nuevo;
 		cola->primero = nodo_nuevo;
+
 	} else {
 
 		cola->ultimo->prox = nodo_nuevo;
-		cola->ultimo = nodo_nuevo;
 	}
+	cola->ultimo = nodo_nuevo;
 
-	cola->tam ++;
 	return true;
 }
 
@@ -104,6 +99,5 @@ void* cola_desencolar(cola_t *cola){
 	cola->primero = cola->primero->prox;
 
 	free(nodo);
-	cola->tam--;
 	return valor;
 }

@@ -80,22 +80,25 @@ void prueba_cola_volumen(int volumen){
 
 	int* vector = malloc(volumen * sizeof(int));
 
-    bool ok = true; 
+    bool ok_encolar = true;
+    bool ok_primero = true;
     for(int i = 0; i < volumen; i++) {
     	vector[i] = i;
-    	ok &= cola_encolar(cola, &vector[i]);
+    	ok_encolar &= cola_encolar(cola, &vector[i]);
+    	ok_primero &= (cola_ver_primero(cola) == &vector[0]);
     }
-    print_test("Se encolaron todos los elementos", ok);
+    print_test("Se encolaron todos los elementos", ok_encolar);
+    print_test("El primer nodo nunca cambio", ok_primero);
 
-    ok = true;
+    bool ok_desencolar = true;
 
     for(int i = 0; i < volumen; i++) {
-    	ok &= (cola_ver_primero(cola) == cola_desencolar(cola));
+    	ok_desencolar &= (cola_ver_primero(cola) == cola_desencolar(cola));
     }
-    print_test("Se desapilaron todos los elementos", ok);
+    print_test("Se desencolaron todos los elementos", ok_desencolar);
 
     free(vector);
-    free(cola);
+    cola_destruir(cola, NULL);
 }
 
 
